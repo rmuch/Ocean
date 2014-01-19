@@ -61,6 +61,8 @@ let serve (iface : string) (routes : RouteList) =
 
         try
             let response = requestHandler request
+            context.Response.StatusCode <- response.StatusCode
+            context.Response.StatusDescription <- response.StatusMessage
             response.Headers
             |> List.iter (fun h -> context.Response.AddHeader(fst h, String.concat "," (snd h)))
             response.BodyWriter(streamWriter)
