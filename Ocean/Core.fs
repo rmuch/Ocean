@@ -10,8 +10,6 @@ open System.Text.RegularExpressions
 type Request =
     { /// Target URL.
       Url : Uri
-      /// HTTP protocol version string.
-      ProtocolVersion : string // TODO: Is this field anything but redundant?
       /// HTTP headers.
       Headers : (string * string list) list
       /// Body reader.
@@ -22,7 +20,6 @@ type Request =
     /// An empty request definition.
     static member empty =
         { Url = null
-          ProtocolVersion = ""
           Headers = []
           BodyReader = null
           MatchParameters = None }
