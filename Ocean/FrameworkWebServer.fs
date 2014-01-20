@@ -18,7 +18,10 @@ let private translateRequest (ctx : HttpListenerContext) : Request =
     let mutable headers = []
     for i = 0 to ctx.Request.Headers.Count - 1 do
         headers <- headers @ [ (ctx.Request.Headers.GetKey(i), ctx.Request.Headers.GetValues(i) |> Array.toList) ]
-    { Request.empty with Url = url; Headers = headers; RemoteEndPoint = ctx.Request.RemoteEndPoint }
+    { Request.empty with Url = url
+                         Headers = headers
+                         BodyReader = fun _ -> new StreamReader(ctx.Request.InputStream)
+                         RemoteEndPoint = ctx.Request.RemoteEndPoint }
 
 /// Translate an Ocean.Request to a System.Net.HttpListenerResponse.
 let private translateResponse (fxResponse : HttpListenerResponse) (oceanResponse : Response) =
