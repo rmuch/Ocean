@@ -20,6 +20,18 @@ let private translateRequest (ctx : HttpListenerContext) : Request =
         headers <- headers @ [ (ctx.Request.Headers.GetKey(i), ctx.Request.Headers.GetValues(i) |> Array.toList) ]
     { Request.empty with Url = url; Headers = headers; RemoteEndPoint = ctx.Request.RemoteEndPoint }
 
+/// Translate an Ocean.Request to a System.Net.HttpListenerResponse.
+let private translateResponse (fxResponse : HttpListenerResponse) (oceanResponse : Response) =
+    use sw = new StreamWriter(fxResponse.OutputStream)
+
+    fxResponse.StatusCode <- oceanResponse.StatusCode
+    fxResponse.StatusDescription <- oceanResponse.StatusMessage
+    oceanResponse.Headers
+    |> List.iter (fun header -> fxResponse.AddHeader(fst header, String.concat "," (snd header)))
+    oceanResponse.BodyWriter(sw)
+
+    sw.Close()
+
 /// Resolve a request to a route handler pair.
 let private resolveRoute_ (routes : RouteList) (req : Request) =
     routes |> List.tryFind (fun r -> 
@@ -60,18 +72,12 @@ let serve (iface : string) (routes : RouteList) =
         let requestHandler = snd route
 
         try
-            let response = requestHandler request
-            context.Response.StatusCode <- response.StatusCode
-            context.Response.StatusDescription <- response.StatusMessage
-            response.Headers
-            |> List.iter (fun h -> context.Response.AddHeader(fst h, String.concat "," (snd h)))
-            response.BodyWriter(streamWriter)
+            requestHandler request |> translateResponse context.Response
         with e ->
             Log.writef "[FrameworkWebServer] Unhandled exception in request handler:\n %s" (e.ToString())
-            (RespondWith.exn e).BodyWriter(streamWriter)
+            RespondWith.exn e |> translateResponse context.Response
 
         // Finish writing response.
-        streamWriter.Close()
         context.Response.Close()
 
     // Recursive accept loop.
