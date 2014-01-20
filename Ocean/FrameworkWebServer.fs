@@ -58,7 +58,7 @@ let serve (iface : string) (routes : RouteList) =
 
         let request = translateRequest context
         Log.writef "[FrameworkWebServer] Accepting request for %s from %s"
-            request.Url.AbsolutePath context.Request.UserHostAddress
+            request.Url.AbsolutePath (request.RemoteEndPoint.ToString())
 
         // This needs to be cleaned up, we also don't want to call the
         // RouteMatcher function twice.
