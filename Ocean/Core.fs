@@ -79,13 +79,13 @@ type RouteList = Route list
 /// Basic URL-matching predicate functions.
 module Match =
     /// Match a path exactly.
-    let path (path : string) (req : Request) =
+    let path (path : string) (req : Request) : MatchResult =
         if req.Url.AbsolutePath = path then Success None else Failure
     /// Match a path with a specific prefix.
-    let prefix (path : string) (req : Request) =
+    let prefix (path : string) (req : Request) : MatchResult =
         if req.Url.AbsolutePath.StartsWith(path) then Success None else Failure
     /// Match by regular expression.
-    let regex (pattern : string) (req : Request) =
+    let regex (pattern : string) (req : Request) : MatchResult =
         let rgx = Regex.Match(req.Url.AbsolutePath, pattern)
         if rgx.Success then Success None else Failure
 
