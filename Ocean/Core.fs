@@ -37,7 +37,7 @@ type Response =
       /// HTTP headers.
       Headers : (string * string list) list
       /// Body writer.
-      BodyWriter : (StreamWriter -> unit) }
+      BodyWriter : StreamWriter -> unit }
     /// A default, empty response definition serving 200 OK and no content.
     static member empty = // TODO: Should this be Response.ok or something?
         { StatusCode = 200
@@ -71,7 +71,7 @@ type RouteMatcher = Request -> MatchResult
 type RequestHandler = Request -> Response
 
 /// Tuple of a route match predicate and a request handler.
-type Route = (RouteMatcher * RequestHandler)
+type Route = RouteMatcher * RequestHandler
 
 /// List of pairs of route matchers and request handlers.
 type RouteList = Route list
