@@ -36,11 +36,16 @@ let private translateResponse (fxResponse : HttpListenerResponse) (oceanResponse
     sw.Close()
 
 /// Resolve a request to a route handler pair.
-let private resolveRoute_ (routes : RouteList) (req : Request) =
-    routes |> List.tryFind (fun r -> 
-                  match (req |> fst r) with
-                  | Success _ -> true
-                  | Failure -> false)
+let private resolveRoute (routes : RouteList) (notFound : RequestHandler) (req : Request) =
+    let chooser (route : Route) =
+        match (req |> fst route) with
+        | Success p -> Some (snd route, Success p)
+        | Failure -> None
+    in
+        let resolvedRoute = List.tryPick chooser routes
+        match resolvedRoute with
+        | Some s -> s
+        | None -> notFound, Failure
 
 /// Serve a RouteList on a given interface using the .NET Framework's integrated
 /// web server. On Windows, consult the netsh documentation to find out how to
@@ -65,17 +70,15 @@ let serve (iface : string) (routes : RouteList) =
 
         // This needs to be cleaned up, we also don't want to call the
         // RouteMatcher function twice.
-        let route = match request |> resolveRoute_ routes with
-                    | Some x -> x
-                    | None -> ((fun _ -> Success None), (fun x -> Response.error 404))
-        let matchResult = request |> fst route
-        let req2 = match matchResult with 
-                   | Success a -> { request with MatchParameters = a }
-                   | Failure -> request
-        let requestHandler = snd route
+        let routeAndResult = resolveRoute routes (fun _ -> RespondWith.err 404) request
+        let req2 =
+            { request with MatchParameters =
+                               match snd routeAndResult with
+                               | Success p -> p
+                               | Failure -> None }
 
         try
-            requestHandler request |> translateResponse context.Response
+            (fst routeAndResult) req2 |> translateResponse context.Response
         with e ->
             Log.writef "[FrameworkWebServer] Unhandled exception in request handler:\n %s" (e.ToString())
             RespondWith.exn e |> translateResponse context.Response
