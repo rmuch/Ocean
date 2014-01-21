@@ -95,4 +95,4 @@ let serve (iface : string) (routes : RouteList) =
             Log.writef "[FrameworkWebServer] Unhandled exception in listen loop:\n %s" (e.ToString())
 
     // Let's go!
-    acceptLoop () |> ignore
+    acceptLoop ()
