@@ -93,10 +93,10 @@ module Match =
 module RespondWith =
     /// Generate a response serving a string.
     let str (s : string) : Response =
-        { Response.empty with BodyWriter = fun w -> w.Write(s) }
+        { Response.ok with BodyWriter = fun w -> w.Write(s) }
     /// Generate a response serving a file.
     let file (path : string) : Response =
-        { Response.empty with BodyWriter = fun w -> w.Write(File.ReadAllText(path)) }
+        { Response.ok with BodyWriter = fun w -> w.Write(File.ReadAllText(path)) }
     /// Generate a response serving a default page for a HTTP error code.
     let err (err : int) : Response =
         Response.error err
