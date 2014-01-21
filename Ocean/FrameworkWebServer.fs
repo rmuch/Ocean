@@ -78,7 +78,7 @@ let serve (iface : string) (routes : RouteList) =
                                | Failure -> None }
 
         try
-            (fst routeAndResult) req2 |> translateResponse context.Response
+            req2 |> fst routeAndResult |> translateResponse context.Response
         with e ->
             Log.writef "[FrameworkWebServer] Unhandled exception in request handler:\n %s" (e.ToString())
             RespondWith.exn e |> translateResponse context.Response
