@@ -63,7 +63,7 @@ type Response =
       /// Body writer.
       BodyWriter : StreamWriter -> unit }
     /// A default, empty response definition serving 200 OK and no content.
-    static member empty = // TODO: Should this be Response.ok or something?
+    static member empty =
         { StatusCode = 200
           StatusMessage = "200 OK"
           Headers = []
