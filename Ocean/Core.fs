@@ -101,6 +101,7 @@ type Route = RouteMatcher * RequestHandler
 type RouteList = Route list
 
 /// Basic URL-matching predicate functions.
+[<RequireQualifiedAccess>]
 module Match =
     /// Match a path exactly.
     let path (path : string) (req : Request) : MatchResult =
@@ -114,6 +115,7 @@ module Match =
         if rgx.Success then Success None else Failure
 
 /// Helper functions for quick responses.
+[<RequireQualifiedAccess>]
 module RespondWith =
     /// Generate a response serving a string.
     let str (s : string) : Response =
