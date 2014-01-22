@@ -43,7 +43,7 @@ type Request =
         { Url = null
           Headers = []
           Cookies = []
-          BodyReader = fun _ -> null
+          BodyReader = null |> ignoreFirst
           RemoteEndPoint = null
           MatchParameters = None }
 
@@ -65,7 +65,7 @@ type Response =
           StatusMessage = "200 OK"
           Headers = []
           Cookies = []
-          BodyWriter = fun _ -> () }
+          BodyWriter = () |> ignoreFirst }
     /// A default, empty response definition serving 200 OK and no content.
     static member ok = Response.empty
     /// A response to serve an error code.
@@ -128,4 +128,3 @@ module RespondWith =
             w.WriteLine("<h1>" + ex.Message + "</h1>")
             w.WriteLine("<pre>" + ex.ToString() + "</pre>")
         { Response.error 500 with BodyWriter = exnWriter }
-

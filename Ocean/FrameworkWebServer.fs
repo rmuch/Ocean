@@ -25,7 +25,7 @@ let private translateRequest (ctx : HttpListenerContext) : Request =
     { Request.empty with Url = url
                          Headers = headers
                          Cookies = cookies
-                         BodyReader = fun _ -> new StreamReader(ctx.Request.InputStream)
+                         BodyReader = new StreamReader(ctx.Request.InputStream) |> ignoreFirst
                          RemoteEndPoint = ctx.Request.RemoteEndPoint }
 
 /// Translate an Ocean.Request to a System.Net.HttpListenerResponse.
@@ -84,7 +84,7 @@ let serve (iface : string) (routes : RouteList) =
 
         // This needs to be cleaned up, we also don't want to call the
         // RouteMatcher function twice.
-        let routeAndResult = resolveRoute routes (fun _ -> RespondWith.err 404) request
+        let routeAndResult = resolveRoute routes (RespondWith.err 404 |> ignoreRequest) request
         let req2 =
             { request with MatchParameters =
                                match snd routeAndResult with
