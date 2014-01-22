@@ -1,4 +1,5 @@
 ﻿/// Provides basic logging facilities.
+[<RequireQualifiedAccess>]
 module Ocean.Log
 
 open System
