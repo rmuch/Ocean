@@ -65,7 +65,7 @@ type Response =
     /// A default, empty response definition serving 200 OK and no content.
     static member empty =
         { StatusCode = 200
-          StatusMessage = "200 OK"
+          StatusMessage = "OK"
           Headers = []
           Cookies = []
           BodyWriter = () |> ignoreFirst }
@@ -76,8 +76,7 @@ type Response =
         let errorCodes = dict [ 404, "Not Found"; 500, "Internal Server Error" ]
         let writer (w : StreamWriter) =
             w.WriteLine("<h1>{0} {1}</h1>", code, errorCodes.Item code)
-        let msg = (code.ToString()) + " " + errorCodes.Item code
-        { Response.empty with StatusCode = code; StatusMessage = msg; BodyWriter = writer }
+        { Response.empty with StatusCode = code; StatusMessage = errorCodes.Item code; BodyWriter = writer }
 
 /// Result type for a RouteMatcher predicate function, representing either a
 /// successful match with optional list parameters, or a failure to provide
