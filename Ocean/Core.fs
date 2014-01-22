@@ -6,6 +6,12 @@ open System.IO
 open System.Net
 open System.Text.RegularExpressions
 
+/// Takes a Response (or any type 'E) and returns a RequestHandler (or any
+/// genericized function of 'P -> 'E), discarding the parameter 'P and
+/// returning 'E.
+let ignoreRequest<'E, 'P> (e : 'E) (_ : 'P) : 'E = e
+let internal ignoreFirst = ignoreRequest
+
 /// Type representing a HTTP cookie received from or about to be sent in
 /// response to a request.
 type Cookie =
@@ -122,3 +128,4 @@ module RespondWith =
             w.WriteLine("<h1>" + ex.Message + "</h1>")
             w.WriteLine("<pre>" + ex.ToString() + "</pre>")
         { Response.error 500 with BodyWriter = exnWriter }
+
