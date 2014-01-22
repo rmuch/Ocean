@@ -22,7 +22,8 @@ let private translateRequest (ctx : HttpListenerContext) : Request =
     for i = 0 to ctx.Request.Cookies.Count - 1 do
         let cookie = ctx.Request.Cookies.Item i
         cookies <- cookies @ [ { Name = cookie.Name; Value = cookie.Value; Expiry = cookie.Expires } ]
-    { Request.empty with Url = url
+    { Request.empty with Verb = ctx.Request.HttpMethod
+                         Url = url
                          Headers = headers
                          Cookies = cookies
                          BodyReader = new StreamReader(ctx.Request.InputStream) |> ignoreFirst

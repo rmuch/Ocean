@@ -25,7 +25,9 @@ type Cookie =
 /// Type representing a HTTP request received from a client and ready to be
 /// processed by a RequestHandler.
 type Request =
-    { /// Target URL.
+    { /// HTTP request verb.
+      Verb : string
+      /// Target URL.
       Url : Uri
       /// HTTP headers.
       Headers : (string * string list) list
@@ -40,7 +42,8 @@ type Request =
       MatchParameters : (string * string) list option }
     /// An empty request definition.
     static member empty =
-        { Url = null
+        { Verb = ""
+          Url = null
           Headers = []
           Cookies = []
           BodyReader = null |> ignoreFirst
