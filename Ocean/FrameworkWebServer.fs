@@ -18,8 +18,13 @@ let private translateRequest (ctx : HttpListenerContext) : Request =
     let mutable headers = []
     for i = 0 to ctx.Request.Headers.Count - 1 do
         headers <- headers @ [ (ctx.Request.Headers.GetKey(i), ctx.Request.Headers.GetValues(i) |> Array.toList) ]
+    let mutable cookies = []
+    for i = 0 to ctx.Request.Cookies.Count - 1 do
+        let cookie = ctx.Request.Cookies.Item i
+        cookies <- cookies @ [ { Name = cookie.Name; Value = cookie.Value; Expiry = cookie.Expires } ]
     { Request.empty with Url = url
                          Headers = headers
+                         Cookies = cookies
                          BodyReader = fun _ -> new StreamReader(ctx.Request.InputStream)
                          RemoteEndPoint = ctx.Request.RemoteEndPoint }
 
@@ -29,8 +34,17 @@ let private translateResponse (fxResponse : HttpListenerResponse) (oceanResponse
 
     fxResponse.StatusCode <- oceanResponse.StatusCode
     fxResponse.StatusDescription <- oceanResponse.StatusMessage
-    oceanResponse.Headers
-    |> List.iter (fun header -> fxResponse.AddHeader(fst header, String.concat "," (snd header)))
+
+    let translateHeader header =
+        fxResponse.AddHeader(fst header, String.concat "," (snd header))
+    in oceanResponse.Headers |> List.iter translateHeader
+
+    let translateCookie cookie =
+        let fxCookie = new Cookie(cookie.Name, cookie.Value)
+        fxCookie.Expires <- cookie.Expiry
+        fxResponse.AppendCookie(fxCookie)
+    in oceanResponse.Cookies |> List.iter translateCookie
+
     oceanResponse.BodyWriter(sw)
 
     sw.Close()

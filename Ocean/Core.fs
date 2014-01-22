@@ -6,6 +6,16 @@ open System.IO
 open System.Net
 open System.Text.RegularExpressions
 
+/// Type representing a HTTP cookie received from or about to be sent in
+/// response to a request.
+type Cookie =
+    { /// Cookie name.
+      Name : string
+      /// Cookie value.
+      Value : string
+      /// Cookie expiry date.
+      Expiry : DateTime }
+
 /// Type representing a HTTP request received from a client and ready to be
 /// processed by a RequestHandler.
 type Request =
@@ -13,6 +23,8 @@ type Request =
       Url : Uri
       /// HTTP headers.
       Headers : (string * string list) list
+      /// Cookies.
+      Cookies : Cookie list
       /// Body reader.
       BodyReader : unit -> StreamReader
       /// IP address and port of the request origin.
@@ -24,6 +36,7 @@ type Request =
     static member empty =
         { Url = null
           Headers = []
+          Cookies = []
           BodyReader = fun _ -> null
           RemoteEndPoint = null
           MatchParameters = None }
@@ -36,6 +49,8 @@ type Response =
       StatusMessage : string
       /// HTTP headers.
       Headers : (string * string list) list
+      /// Cookies.
+      Cookies : Cookie list
       /// Body writer.
       BodyWriter : StreamWriter -> unit }
     /// A default, empty response definition serving 200 OK and no content.
@@ -43,6 +58,7 @@ type Response =
         { StatusCode = 200
           StatusMessage = "200 OK"
           Headers = []
+          Cookies = []
           BodyWriter = fun _ -> () }
     /// A default, empty response definition serving 200 OK and no content.
     static member ok = Response.empty
