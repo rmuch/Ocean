@@ -127,6 +127,6 @@ module RespondWith =
     /// Generate a response serving a default page for an exception and stack trace.
     let exn (ex : exn) : Response =
         let exnWriter (w : StreamWriter) =
-            w.WriteLine("<h1>" + ex.Message + "</h1>")
-            w.WriteLine("<pre>" + ex.ToString() + "</pre>")
+            w.WriteLine("<h1>{0}</h1>", ex.Message)
+            w.WriteLine("<pre>{0}</pre>", ex.ToString())
         { Response.error 500 with BodyWriter = exnWriter }
