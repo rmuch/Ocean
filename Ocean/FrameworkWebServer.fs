@@ -57,8 +57,7 @@ let private resolveRoute (routes : RouteList) (notFound : RequestHandler) (req :
         | Success p -> Some (snd route, Success p)
         | Failure -> None
     in
-        let resolvedRoute = List.tryPick chooser routes
-        match resolvedRoute with
+        match routes |> List.tryPick chooser with
         | Some s -> s
         | None -> notFound, Failure
 
