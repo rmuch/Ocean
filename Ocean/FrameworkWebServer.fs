@@ -53,7 +53,7 @@ let private translateResponse (fxResponse : HttpListenerResponse) (oceanResponse
 /// Resolve a request to a route handler pair.
 let private resolveRoute (routes : RouteList) (notFound : RequestHandler) (req : Request) =
     let chooser (route : Route) =
-        match (req |> fst route) with
+        match req |> fst route with
         | Success p -> Some (snd route, Success p)
         | Failure -> None
     in
