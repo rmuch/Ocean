@@ -42,6 +42,7 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Resources.fs" />
     <Compile Include="Log.fs" />
     <Compile Include="Core.fs" />
     <Compile Include="FrameworkWebServer.fs" />

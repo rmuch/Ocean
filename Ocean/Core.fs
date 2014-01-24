@@ -75,7 +75,9 @@ type Response =
     static member error (code : int) =
         let errorCodes = dict [ 404, "Not Found"; 500, "Internal Server Error" ]
         let writer (w : StreamWriter) =
+            w.WriteLine(Ocean.Resources.internalPageStart)
             w.WriteLine("<h1>{0} {1}</h1>", code, errorCodes.Item code)
+            w.WriteLine(Ocean.Resources.internalPageEnd)
         { Response.empty with StatusCode = code; StatusMessage = errorCodes.Item code; BodyWriter = writer }
 
 /// Result type for a RouteMatcher predicate function, representing either a
@@ -129,6 +131,8 @@ module RespondWith =
     /// Generate a response serving a default page for an exception and stack trace.
     let exn (ex : exn) : Response =
         let exnWriter (w : StreamWriter) =
+            w.WriteLine(Ocean.Resources.internalPageStart);
             w.WriteLine("<h1>{0}</h1>", ex.Message)
-            w.WriteLine("<pre>{0}</pre>", ex.ToString())
+            w.WriteLine("""<code class="ocean-stack-trace"><pre>{0}</pre></code>""", ex.ToString())
+            w.WriteLine(Ocean.Resources.internalPageEnd);
         { Response.error 500 with BodyWriter = exnWriter }
