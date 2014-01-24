@@ -12,6 +12,33 @@ open System.Text.RegularExpressions
 let ignoreRequest<'E, 'P> (e : 'E) (_ : 'P) : 'E = e
 let internal ignoreFirst = ignoreRequest
 
+/// Dictionary of HTTP status codes and their string descriptions.
+let internal httpStatusCodes =
+    dict [ 200, "OK"
+           201, "Created"
+           202, "Accepted"
+           203, "Non-Authoritative Information"
+           204, "No Content"
+           205, "Reset Content"
+           206, "Partial Content"
+
+           300, "Multiple Choices"
+           301, "Moved Permanently"
+           302, "Found"
+           303, "See Other"
+           304, "Not Modified"
+
+           400, "Bad Request"
+           401, "Unauthorized"
+           402, "Payment Required"
+           403, "Forbidden"
+           404, "Not Found"
+           410, "Gone"
+           418, "I'm a teapot"
+
+           500, "Internal Server Error"
+           501, "Not Implemented" ]
+
 /// Type representing a HTTP cookie received from or about to be sent in
 /// response to a request.
 type Cookie =
@@ -73,12 +100,11 @@ type Response =
     static member ok = Response.empty
     /// A response to serve an error code.
     static member error (code : int) =
-        let errorCodes = dict [ 404, "Not Found"; 500, "Internal Server Error" ]
         let writer (w : StreamWriter) =
             w.WriteLine(Ocean.Resources.internalPageStart)
-            w.WriteLine("<h1>{0} {1}</h1>", code, errorCodes.Item code)
+            w.WriteLine("<h1>{0} {1}</h1>", code, httpStatusCodes.Item code)
             w.WriteLine(Ocean.Resources.internalPageEnd)
-        { Response.empty with StatusCode = code; StatusMessage = errorCodes.Item code; BodyWriter = writer }
+        { Response.empty with StatusCode = code; StatusMessage = httpStatusCodes.Item code; BodyWriter = writer }
 
 /// Result type for a RouteMatcher predicate function, representing either a
 /// successful match with optional list parameters, or a failure to provide
