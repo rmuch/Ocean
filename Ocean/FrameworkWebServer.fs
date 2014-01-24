@@ -89,7 +89,7 @@ let serve (iface : string) (routes : RouteList) =
             { request with MatchParameters =
                                match snd routeAndResult with
                                | Success p -> p
-                               | Failure -> None }
+                               | Failure -> [] }
 
         try
             req2 |> fst routeAndResult |> translateResponse context.Response
