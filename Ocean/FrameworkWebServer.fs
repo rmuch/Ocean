@@ -95,7 +95,11 @@ let serve (iface : string) (routes : RouteList) =
             req2 |> fst routeAndResult |> translateResponse context.Response
         with e ->
             Log.writef "[FrameworkWebServer] Unhandled exception in request handler:\n %s" (e.ToString())
-            RespondWith.exn e |> translateResponse context.Response
+            if request.RemoteEndPoint.Address = IPAddress.Loopback ||
+               request.RemoteEndPoint.Address = IPAddress.IPv6Loopback then
+                RespondWith.exn e |> translateResponse context.Response
+            else
+                RespondWith.err 500 |> translateResponse context.Response
 
         // Finish writing response.
         context.Response.Close()
