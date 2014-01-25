@@ -88,7 +88,7 @@ type Response =
       /// Cookies.
       Cookies : Cookie list
       /// Body writer.
-      BodyWriter : StreamWriter -> unit }
+      BodyWriter : TextWriter -> unit }
     /// A default, empty response definition serving 200 OK and no content.
     static member empty =
         { StatusCode = 200
@@ -100,7 +100,7 @@ type Response =
     static member ok = Response.empty
     /// A response to serve an error code.
     static member error (code : int) =
-        let writer (w : StreamWriter) =
+        let writer (w : TextWriter) =
             w.WriteLine(Ocean.Resources.internalPageStart)
             w.WriteLine("<h1>{0} {1}</h1>", code, httpStatusCodes.Item code)
             w.WriteLine(Ocean.Resources.internalPageEnd)
@@ -156,7 +156,7 @@ module RespondWith =
         Response.error err
     /// Generate a response serving a default page for an exception and stack trace.
     let exn (ex : exn) : Response =
-        let exnWriter (w : StreamWriter) =
+        let exnWriter (w : TextWriter) =
             w.WriteLine(Ocean.Resources.internalPageStart);
             w.WriteLine("<h1>{0}</h1>", ex.Message)
             w.WriteLine("""<code class="ocean-stack-trace"><pre>{0}</pre></code>""", ex.ToString())

@@ -46,7 +46,7 @@ let private translateResponse (fxResponse : HttpListenerResponse) (oceanResponse
         fxResponse.AppendCookie(fxCookie)
     in oceanResponse.Cookies |> List.iter translateCookie
 
-    oceanResponse.BodyWriter(sw)
+    oceanResponse.BodyWriter(upcast sw)
 
     sw.Close()
 
