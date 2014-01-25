@@ -1,11 +1,13 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+VisualStudioVersion = 12.0.30110.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Ocean", "Ocean\Ocean.fsproj", "{A97966BA-95E8-4D93-AE07-D634F6B549B9}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "OceanWebSite", "OceanWebSite\OceanWebSite.fsproj", "{C439B030-23B5-4A2F-9CBD-D39B0C50AD47}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Ocean.Tests", "Ocean.Tests\Ocean.Tests.fsproj", "{C96F1BF1-D304-45EA-B034-75CDBB8C8B00}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{C439B030-23B5-4A2F-9CBD-D39B0C50AD47}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C439B030-23B5-4A2F-9CBD-D39B0C50AD47}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C439B030-23B5-4A2F-9CBD-D39B0C50AD47}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C96F1BF1-D304-45EA-B034-75CDBB8C8B00}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C96F1BF1-D304-45EA-B034-75CDBB8C8B00}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C96F1BF1-D304-45EA-B034-75CDBB8C8B00}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C96F1BF1-D304-45EA-B034-75CDBB8C8B00}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
