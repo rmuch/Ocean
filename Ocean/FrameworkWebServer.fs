@@ -50,17 +50,6 @@ let private translateResponse (fxResponse : HttpListenerResponse) (oceanResponse
 
     sw.Close()
 
-/// Resolve a request to a route handler pair.
-let private resolveRoute (routes : RouteList) (notFound : RequestHandler) (req : Request) =
-    let chooser (route : Route) =
-        match req |> fst route with
-        | Success p -> Some (snd route, Success p)
-        | Failure -> None
-    in
-        match routes |> List.tryPick chooser with
-        | Some s -> s
-        | None -> notFound, Failure
-
 /// Serve a RouteList on a given interface using the .NET Framework's integrated
 /// web server. On Windows, consult the netsh documentation to find out how to
 /// add a URL ACL to prevent permission errors while running as a non-elevated

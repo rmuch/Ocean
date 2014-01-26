@@ -162,3 +162,14 @@ module RespondWith =
             w.WriteLine("""<code class="ocean-stack-trace"><pre>{0}</pre></code>""", ex.ToString())
             w.WriteLine(Ocean.Resources.internalPageEnd);
         { Response.error 500 with BodyWriter = exnWriter }
+
+/// Resolve a Request to a RequestHandler, also providing the result of the RouteMatcher function.
+let rec resolveRoute (route : RouteList)
+                     (notFoundHandler : RequestHandler)
+                     (req : Request) : RequestHandler * MatchResult =
+    match route with
+    | head :: tail ->
+        match req |> fst head with
+        | Success res -> snd head, Success res
+        | Failure -> resolveRoute tail notFoundHandler req
+    | [] -> notFoundHandler, Failure
