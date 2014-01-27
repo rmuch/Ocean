@@ -1,0 +1,69 @@
+﻿@light-shade-color: rgba(0, 238, 114, 0.33);
+@mid-shade-color: rgba(0, 164, 78, 0.75);
+@dark-shade-color: rgb(1, 144, 69);
+
+@selection-bg-color: @light-shade-color;
+@a-color: @mid-shade-color;
+@a-hover-color: @dark-shade-color;
+
+@sans-serif-font: 'Segoe UI', sans-serif;
+@monospace-font: 'Consolas', monospace;
+
+body {
+    font-family: @sans-serif-font;
+    font-weight: 400;
+    max-width: 720px;
+    margin: 0 auto;
+}
+
+h1, h2 {
+    font-weight: 400;
+}
+
+.ocean-powered-by {
+    font-size: small;
+}
+
+code {
+    background-color: fade(@selection-bg-color, 7%);
+    padding: 8px;
+
+    &.ocean-stack-trace, &.ocean-code-block {
+        display: block;
+        overflow-x: auto;
+    }
+}
+
+pre {
+    margin: 0;
+}
+
+code, pre {
+    font-family: @monospace-font;
+    font-size: small;
+}
+
+.transition(@transition) {
+    -moz-transition: @transition;
+    -o-transition: @transition;
+    -webkit-transition: @transition;
+    transition: @transition;
+}
+
+a {
+    color: @a-color;
+    .transition(color 0.33s ease-in-out);
+
+    &:hover {
+        color: @a-hover-color;
+        .transition(color 0.33s ease-in-out);
+    }
+}
+
+::selection {
+    background-color: @selection-bg-color;
+}
+
+::-moz-selection {
+    background-color: @selection-bg-color;
+}
