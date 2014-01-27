@@ -52,3 +52,14 @@ let TestMatchPrefix () =
     |> List.iter (fun req -> match Match.prefix testPrefix req with
                              | Success _ -> Assert.Fail()
                              | Failure -> ())
+
+[<Test>]
+let TestResolveRouteOrder () =
+    let order = ref 1
+    let routes =
+        [ (fun req -> Assert.That(order, Is.EqualTo(1)); order := !order + 1; Match.path "/a" req), fun _ -> Assert.Fail(); Response.ok
+          (fun req -> Assert.That(order, Is.EqualTo(2)); order := !order + 1; Match.path "/b" req), fun _ -> Response.ok
+          (fun req -> Assert.That(order, Is.EqualTo(3)); Assert.Fail(); Match.path "/c" req), fun _ -> Assert.Fail(); Response.ok ]
+    let req = { Request.empty with Url = new Uri("http://localhost:8080/b") }
+    let result = resolveRoute routes (fun _ -> Assert.Fail(); Response.error 404) req
+    req |> fst result |> ignore
