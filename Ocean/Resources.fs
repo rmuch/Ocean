@@ -10,23 +10,27 @@ let internalPageStylesheet =
   max-width: 720px;
   margin: 0 auto;
 }
-h1 {
+h1,
+h2 {
   font-weight: 400;
 }
 .ocean-powered-by {
   font-size: small;
 }
 code {
-  font-family: 'Consolas', monospace;
   background-color: rgba(0, 238, 114, 0.07);
   padding: 8px;
 }
-code.ocean-stack-trace {
+code.ocean-stack-trace,
+code.ocean-code-block {
   display: block;
-  overflow-x: scroll;
+  overflow-x: auto;
 }
 pre {
   margin: 0;
+}
+code,
+pre {
   font-family: 'Consolas', monospace;
   font-size: small;
 }
