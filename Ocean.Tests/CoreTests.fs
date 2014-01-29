@@ -25,7 +25,8 @@ let TestMatchPath () =
     let testPath = "/test/path"
     let rootUrl = "http://localhost:8080"
     // Request that should pass.
-    let matchResult = Match.path testPath { Request.empty with Url = new Uri("http://localhost:8080/test/path") }
+    let matchResult = { Request.empty with Url = new Uri("http://localhost:8080/test/path") }
+                      |> Match.path testPath
     match matchResult with
     | Success _ -> ()
     | Failure -> Assert.Fail()
@@ -57,9 +58,15 @@ let TestMatchPrefix () =
 let TestResolveRouteOrder () =
     let order = ref 1
     let routes =
-        [ (fun req -> Assert.That(order, Is.EqualTo(1)); order := !order + 1; Match.path "/a" req), fun _ -> Assert.Fail(); Response.ok
-          (fun req -> Assert.That(order, Is.EqualTo(2)); order := !order + 1; Match.path "/b" req), fun _ -> Response.ok
-          (fun req -> Assert.That(order, Is.EqualTo(3)); Assert.Fail(); Match.path "/c" req), fun _ -> Assert.Fail(); Response.ok ]
+        [ // Route 1
+          (fun req -> Assert.That(order, Is.EqualTo(1)); order := !order + 1; Match.path "/a" req),
+          (fun _ -> Assert.Fail(); Response.ok)
+          // Route 2
+          (fun req -> Assert.That(order, Is.EqualTo(2)); order := !order + 1; Match.path "/b" req),
+          (fun _ -> Response.ok)
+          // Route 3
+          (fun req -> Assert.That(order, Is.EqualTo(3)); Assert.Fail(); Match.path "/c" req),
+          (fun _ -> Assert.Fail(); Response.ok) ]
     let req = { Request.empty with Url = new Uri("http://localhost:8080/b") }
     let result = resolveRoute routes (fun _ -> Assert.Fail(); Response.error 404) req
     req |> fst result |> ignore
