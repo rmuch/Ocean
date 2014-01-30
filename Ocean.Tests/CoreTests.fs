@@ -21,6 +21,15 @@ let TestResponseErrorIsValid () =
     Assert.That(response.StatusMessage, Is.StringMatching("Not Found"))
 
 [<Test>]
+let TestRespondWithStr () =
+    use writer = new StringWriter()
+    let testString = "hello world"
+    let rsp = RespondWith.str testString
+    rsp.BodyWriter(upcast writer)
+    let writtenResult = writer.ToString()
+    Assert.That(testString, Is.EqualTo(writtenResult))
+
+[<Test>]
 let TestMatchPath () =
     let testPath = "/test/path"
     let rootUrl = "http://localhost:8080"
