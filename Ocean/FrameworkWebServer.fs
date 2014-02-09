@@ -29,7 +29,7 @@ let private translateRequest (ctx : HttpListenerContext) : Request =
                          BodyReader = new StreamReader(ctx.Request.InputStream) |> ignoreFirst
                          RemoteEndPoint = ctx.Request.RemoteEndPoint }
 
-/// Translate an Ocean.Request to a System.Net.HttpListenerResponse.
+/// Translate an Ocean.Response to a System.Net.HttpListenerResponse.
 let private translateResponse (fxResponse : HttpListenerResponse) (oceanResponse : Response) =
     use sw = new StreamWriter(fxResponse.OutputStream)
 
