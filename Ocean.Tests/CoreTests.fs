@@ -8,18 +8,21 @@ open Ocean.Core
 
 open NUnit.Framework
 
+/// Test that the default response provides the expected error code and message.
 [<Test>]
 let TestResponseOKIsValid () =
     let response = Response.ok
     Assert.That(response.StatusCode, Is.EqualTo(200))
     Assert.That(response.StatusMessage, Is.StringMatching("OK"))
 
+/// Test that the not found response provides the expected error code and message.
 [<Test>]
 let TestResponseErrorIsValid () =
     let response = Response.error 404
     Assert.That(response.StatusCode, Is.EqualTo(404))
     Assert.That(response.StatusMessage, Is.StringMatching("Not Found"))
 
+/// Test that the string response writer writes the expected text to the output stream.
 [<Test>]
 let TestRespondWithStr () =
     use writer = new StringWriter()
@@ -29,6 +32,7 @@ let TestRespondWithStr () =
     let writtenResult = writer.ToString()
     Assert.That(testString, Is.EqualTo(writtenResult))
 
+/// Test that a full path is matched exactly.
 [<Test>]
 let TestMatchPath () =
     let testPath = "/test/path"
@@ -46,6 +50,7 @@ let TestMatchPath () =
                              | Success _ -> Assert.Fail()
                              | Failure -> ())
 
+/// Test that a full path is matched by prefix.
 [<Test>]
 let TestMatchPrefix () =
     let testPrefix = "/prefixed"
@@ -63,6 +68,7 @@ let TestMatchPrefix () =
                              | Success _ -> Assert.Fail()
                              | Failure -> ())
 
+/// Test that routes are resolved in ascending order.
 [<Test>]
 let TestResolveRouteOrder () =
     let order = ref 1
