@@ -12,19 +12,21 @@ Ocean draws inspiration from many of the newest popular lightweight web framewor
 
 Here is a simple website in Ocean, demonstrating how easy it is to get started: -
 
-	open Ocean
-	open Ocean.Core
+```fsharp
+open Ocean
+open Ocean.Core
 
-	let mainHandler req =
-	    RespondWith.str """<p>Hello from Ocean!</p>"""
+let mainHandler req =
+    RespondWith.str """<p>Hello from Ocean!</p>"""
 
-	let routes =
-	    [ Match.path "/", mainHandler ]
+let routes =
+    [ Match.path "/", mainHandler ]
 
-	[<EntryPoint>]
-	let main argv =
-	    FrameworkWebServer.serve "http://*:8080/" routes
-	    0
+[<EntryPoint>]
+let main argv =
+    FrameworkWebServer.serve "http://*:8080/" routes
+    0
+```
 
 ## Getting Started
 
