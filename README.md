@@ -47,7 +47,8 @@ You can use the `netsh` command to add a URL ACL reservation, to allow a non-ele
 For example, to add a URL ACL reservation for the current user to serve on port 8080, run the following PowerShell command as administrator: -
 
 ```posh
-netsh http add urlacl url=http://+:8080/ user=$([System.Environment]::UserDomainName + "\" + [System.Environment]::UserName)```
+netsh http add urlacl url=http://+:8080/ user=$([System.Environment]::UserDomainName + "\" + [System.Environment]::UserName)
+```
 
 For more information on the `netsh` command, see the following MSDN topics: -
 
