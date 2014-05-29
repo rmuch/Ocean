@@ -44,9 +44,10 @@ When you attempt to build and run the Ocean sample application on a Windows syst
 
 You can use the `netsh` command to add a URL ACL reservation, to allow a non-elevated user to serve HTTP on a specific hostname and port.
 
-For example, to add a URL ACL reservation for the local user Jim to serve on port 8080, use the following command: -
+For example, to add a URL ACL reservation for the current user to serve on port 8080, run the following PowerShell command as administrator: -
 
-    netsh add urlacl url=http://*:8080/ user=\Jim
+```posh
+netsh http add urlacl url=http://+:8080/ user=$([System.Environment]::UserDomainName + "\" + [System.Environment]::UserName)```
 
 For more information on the `netsh` command, see the following MSDN topics: -
 
